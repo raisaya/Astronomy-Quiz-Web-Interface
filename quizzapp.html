@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>كويز علم الفلك — 16 سؤال</title>
+  <style>
+    :root{
+      --bg1: #0f172a; /* deep blue */
+      --bg2: #071126; /* darker */
+      --accent: #7ee787; /* mint */
+      --accent-2: #8ab4ff; /* sky */
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --glass-border: rgba(255,255,255,0.08);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(138,180,255,0.06), transparent),
+                  radial-gradient(1000px 500px at 90% 90%, rgba(126,231,135,0.03), transparent),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:#ecf0f3;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:40px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:24px;
+    }
+
+    .stage{
+      width:min(1100px,96%);
+      display:grid;
+      grid-template-columns: 380px 1fr;
+      gap:28px;
+    }
+
+    /* SIDEBAR */
+    .sidebar{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border:1px solid var(--glass-border);
+      border-radius:20px;
+      padding:20px;
+      backdrop-filter: blur(6px) saturate(120%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      min-height:520px;
+    }
+    .brand{
+      display:flex;flex-direction:column;gap:8px;margin-bottom:12px;
+    }
+    .logo{
+      display:flex;align-items:center;gap:12px
+    }
+    .mark{
+      width:56px;height:56px;border-radius:14px;background:conic-gradient(from 200deg,#7ee787,#8ab4ff,#c18bff,#7ee787);
+      box-shadow:0 6px 24px rgba(138,180,255,0.06), 0 1px 0 rgba(255,255,255,0.04) inset;
+      display:flex;align-items:center;justify-content:center;font-weight:700;color:#071126
+    }
+    h1{font-size:18px;margin:0}
+    p.lead{margin:0;color:rgba(236,240,243,0.75);font-size:13px}
+
+    .meta{margin-top:18px;display:flex;flex-direction:column;gap:12px}
+    .progress-wrap{background:var(--glass);border-radius:12px;padding:10px;border:1px solid var(--glass-border)}
+    .progress{
+      height:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:10px;transition:width .45s cubic-bezier(.2,.9,.2,1);
+      box-shadow:0 4px 18px rgba(124,160,255,0.08);
+    }
+    .stat{display:flex;justify-content:space-between;font-size:13px}
+
+    .list{
+      margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px
+    }
+    .bullet{
+      background:transparent;border:1px dashed rgba(255,255,255,0.06);padding:8px;border-radius:8px;text-align:center;font-size:13px;cursor:pointer
+    }
+    .bullet.active{background:linear-gradient(90deg,rgba(126,231,135,0.12),rgba(138,180,255,0.06));border:1px solid rgba(138,180,255,0.18)}
+
+    .btn{
+      display:inline-block;padding:10px 16px;border-radius:12px;border:0;cursor:pointer;font-weight:600;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#042036;box-shadow:0 8px 30px rgba(8,12,30,0.5);
+    }
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent-2)}
+
+    /* MAIN */
+    .main{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid var(--glass-border);border-radius:20px;padding:28px;min-height:520px;display:flex;flex-direction:column;gap:16px;
+      box-shadow: 0 12px 50px rgba(1,6,20,0.6);
+    }
+
+    .question-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .q-title{font-size:20px;margin:0}
+    .q-sub{color:rgba(236,240,243,0.65);font-size:13px}
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border-radius:14px;padding:14px;border:1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 6px 22px rgba(2,6,23,0.5);
+    }
+
+    .options{display:grid;gap:12px;margin-top:8px}
+    .option{
+      padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;user-select:none;
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+      display:flex;align-items:center;gap:12px
+    }
+    .option:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.45)}
+    .option input{display:none}
+    .option .label{flex:1}
+
+    .option.selected{background:linear-gradient(90deg, rgba(126,231,135,0.08), rgba(138,180,255,0.04));border:1px solid rgba(138,180,255,0.12)}
+
+    .controls{display:flex;justify-content:space-between;align-items:center;margin-top:auto;gap:12px}
+
+    .footer-mini{display:flex;gap:10px;align-items:center}
+
+    
+    .result{
+      position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.85));backdrop-filter: blur(6px);
+    }
+    .result.show{display:flex}
+    .result-card{background:linear-gradient(180deg,#071126,#0f1a2b);padding:28px;border-radius:16px;border:1px solid rgba(255,255,255,0.06);text-align:center;min-width:320px}
+    .result-card h2{margin:0 0 8px}
+    .score{font-size:42px;font-weight:800;color:var(--accent);margin:6px 0}
+
+    
+    @media (max-width:880px){
+      .stage{grid-template-columns:1fr;}
+      .sidebar{order:2}
+      .main{order:1}
+    }
+
+    /* little star animation */
+    .starfield{position:absolute;inset:0;pointer-events:none;opacity:0.22}
+    .star{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,0.9);position:absolute;filter:blur(.6px);animation:twinkle 6s infinite}
+    @keyframes twinkle{0%{opacity:0.1}50%{opacity:1}100%{opacity:0.1}}
+  </style>
+</head>
+<body>
+  <div class="stage">
+
+    <aside class="sidebar" aria-label="ملخص الكويز">
+      <div class="brand">
+        <div class="logo">
+          <div class="mark">☆</div>
+          <div>
+            <h1>كويز علم الفلك</h1>
+            <p class="lead">16 سؤال — اختبر معرفتك بالنجوم والكواكب والمجرات</p>
+          </div>
+        </div>
+        <div class="meta">
+          <div class="progress-wrap card">
+            <div class="stat"><span id="qCount">سؤال 1 من 16</span><span id="timer">00:00</span></div>
+            <div style="height:8px;margin-top:8px;border-radius:8px;background:rgba(255,255,255,0.02);overflow:hidden">
+              <div id="progress" class="progress" style="width:6.25%"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-size:13px;color:rgba(236,240,243,0.75)">النقاط الحالية</div>
+                <div style="font-weight:800;font-size:20px"> <span id="score">0</span> / 16</div>
+              </div>
+              <div>
+                <button class="btn" id="restart">أعد المحاولة</button>
+              </div>
+            </div>
+            <div style="margin-top:12px;font-size:13px;color:rgba(236,240,243,0.65)">نصائح: ركز على القراءة ثم اختر بسرعة — التوقيت اختياري.</div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <div style="font-size:13px;color:rgba(236,240,243,0.75);margin-bottom:8px">انتقل إلى سؤال</div>
+            <div class="list" id="navBullets"></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main" role="main">
+      <div class="question-head">
+        <div>
+          <h2 class="q-title" id="qTitle">ما هو أكبر كوكب في النظام الشمسي؟</h2>
+          <div class="q-sub">اختر الإجابة الصحيحة من الخيارات التالية</div>
+        </div>
+        <div class="footer-mini">
+          <div style="font-size:13px;color:rgba(236,240,243,0.65)">مستوى: مبتدئ</div>
+        </div>
+      </div>
+
+      <section class="card">
+        <div class="options" id="options"></div>
+      </section>
+
+      <div class="controls">
+        <div>
+          <button class="btn ghost" id="prev">السابق</button>
+          <button class="btn" id="next">التالي</button>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="font-size:13px;color:rgba(236,240,243,0.75)">سجل تفصيلي</div>
+          <div style="background:var(--card);padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)">إجابات محفوظة: <strong id="answered">0</strong></div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+  <div class="result" id="resultModal" role="dialog" aria-modal="true">
+    <div class="result-card">
+      <h2>النتيجة النهائية</h2>
+      <div class="score" id="finalScore">0 / 16</div>
+      <p id="comment">رائع! لديك شغف بعلم الفلك.</p>
+      <div style="margin-top:12px;display:flex;gap:10px;justify-content:center">
+        <button class="btn" id="tryAgain">أعِد المحاولة</button>
+        <button class="btn ghost" id="closeRes">اقفل</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="starfield" aria-hidden="true"></div>
+
+  <script>
+    // --- QUESTIONS DATA (16) ---
+    const questions = [
+      {q: 'ما هو أكبر كوكب في النظام الشمسي؟', a: ['المريخ','الأرض','المشتري','زحل'], correct:2},
+      {q: 'ما اسم مجرتنا؟', a: ['أندروميدا','درب التبانة','مثلث','سحابة ماجلان الصغيرة'], correct:1},
+      {q: 'ما اسم النجم الأقرب إلى الأرض (بعد الشمس)؟', a: ['سيريوس','بروكسيما قنطورس','فيغا','أركتوروس'], correct:1},
+      {q: 'أي كوكب يُعرف بكوكب الحلقات؟', a: ['زحل','عطارد','نبتون','المريخ'], correct:0},
+      {q: 'ما هو اسم الظاهرة التي تفقد فيها النجوم ضوءها بسبب الغازات حول نجم؟', a: ['الإنفجار النووي','الامتصاص الطيفي','الاحترار الحراري','الكسوف'], correct:1},
+      {q: 'ما هو جسم الفضاء الذي يدور حول كوكب؟', a: ['نجم','قمر','كويكب','مذنب'], correct:1},
+      {q: 'ما اسم الكوكب الأحمر؟', a: ['الزهرة','المريخ','زحل','المشتري'], correct:1},
+      {q: 'ما الذي يحدد لون النجم إلى حد كبير؟', a: ['حجمه','درجة حرارته','بعده','سرعته'], correct:1},
+      {q: 'ما هو النواة المتبقية بعد انفجار نجم ضخم؟', a: ['قزم أبيض','نجمة نيوترونية أو ثقب أسود','كوكب عملاق','سحابة غاز'], correct:1},
+      {q: 'ما اسم ظاهرة مرور القمر أمام الشمس؟', a: ['كسوف الشمس','خسوف القمر','شفق قطبي','انقلاب الربيع'], correct:0},
+      {q: 'أي من التالي يعد كوكباً قريبا جداً من الشمس؟', a: ['المشتري','عطارد','نبتون','أورانوس'], correct:1},
+      {q: 'ما اسم المراه التي تنتج من سقوط صخرة صغيرة في الغلاف الجوي؟', a: ['مذنب','شهاب/نجم ساقط','كويكب','قمر صناعي'], correct:1},
+      {q: 'ما هي وحدة قياس المسافات بين النجوم عادةً؟', a: ['كيلومتر','سنة ضوئية','متر','مغوما'], correct:1},
+      {q: 'أي كوكب يمتلك أكبر عدد من الأقمار المكتشفة حتى الآن؟', a: ['زحل','المشتري','الأرض','المريخ'], correct:0},
+      {q: 'ما هي الكويكبات عادةً؟', a: ['نجوم صغيرة','جسيمات غازية','أجسام صخرية في النظام الشمسي','حلقات كوكب'], correct:2},
+      {q: 'ما اسم الصيغة التي تصف توسع الكون (المبدأ)؟', a: ['قانون نيوتن','ثابت بلانك','نظرية الانفجار العظيم','معادلة أرشيميدس'], correct:2}
+    ];
+
+    // state
+    let idx = 0;
+    let answers = Array(questions.length).fill(null);
+    let score = 0;
+
+    // elements
+    const qTitle = document.getElementById('qTitle');
+    const optionsEl = document.getElementById('options');
+    const progress = document.getElementById('progress');
+    const qCount = document.getElementById('qCount');
+    const navBullets = document.getElementById('navBullets');
+    const nextBtn = document.getElementById('next');
+    const prevBtn = document.getElementById('prev');
+    const scoreEl = document.getElementById('score');
+    const answeredEl = document.getElementById('answered');
+    const resultModal = document.getElementById('resultModal');
+    const finalScore = document.getElementById('finalScore');
+    const comment = document.getElementById('comment');
+    const restart = document.getElementById('restart');
+    const tryAgain = document.getElementById('tryAgain');
+    const closeRes = document.getElementById('closeRes');
+
+    function buildBullets(){
+      navBullets.innerHTML = '';
+      for(let i=0;i<questions.length;i++){
+        const b = document.createElement('div');
+        b.className = 'bullet' + (i===idx? ' active':'');
+        b.textContent = i+1;
+        b.addEventListener('click', ()=>{ goTo(i); });
+        navBullets.appendChild(b);
+      }
+    }
+
+    function render(){
+      const cur = questions[idx];
+      qTitle.textContent = cur.q;
+      optionsEl.innerHTML = '';
+      cur.a.forEach((opt,i)=>{
+        const div = document.createElement('label');
+        div.className = 'option' + (answers[idx]===i? ' selected':'');
+        div.setAttribute('role','button');
+        div.innerHTML = `<input type='radio' name='opt' value='${i}' ${answers[idx]===i? 'checked':''} /><div class='label'>${opt}</div>`;
+        div.addEventListener('click',(e)=>{
+          // mark answer
+          answers[idx] = i;
+          updateScorePreview();
+          render();
+        });
+        optionsEl.appendChild(div);
+      });
+
+
+      qCount.textContent = `سؤال ${idx+1} من ${questions.length}`;
+      progress.style.width = `${((idx+1)/questions.length)*100}%`;
+ 
+      Array.from(navBullets.children).forEach((b,i)=>{ b.classList.toggle('active', i===idx); });
+
+      prevBtn.disabled = idx===0;
+      nextBtn.textContent = idx===questions.length-1 ? 'انهاء' : 'التالي';
+
+      answeredEl.textContent = answers.filter(a=>a!==null).length;
+    }
+
+    function goTo(i){ idx = i; render(); }
+
+    nextBtn.addEventListener('click', ()=>{
+      if(idx < questions.length-1){ idx++; render(); }
+      else finish();
+    });
+    prevBtn.addEventListener('click', ()=>{ if(idx>0) idx--; render(); });
+
+    function updateScorePreview(){
+      // preview score counts correct answers so far
+      let s = 0;
+      answers.forEach((a,i)=>{ if(a!==null && a===questions[i].correct) s++; });
+      score = s;
+      scoreEl.textContent = score;
+    }
+
+    function finish(){
+     
+      updateScorePreview();
+      finalScore.textContent = `${score} / ${questions.length}`;
+      if(score >= 13) comment.textContent = 'ممتاز — أنت نجم في علم الفلك!';
+      else if(score >=9) comment.textContent = 'جيد جداً — لديك معرفة قوية.';
+      else comment.textContent = 'حسنًا — حاول مرة أخرى واطلع على مصادر جديدة.';
+      resultModal.classList.add('show');
+    }
+
+    restart.addEventListener('click', ()=>{ answers = Array(questions.length).fill(null); idx=0; score=0; updateScorePreview(); render(); });
+    tryAgain.addEventListener('click', ()=>{ resultModal.classList.remove('show'); answers = Array(questions.length).fill(null); idx=0; score=0; updateScorePreview(); render(); });
+    closeRes.addEventListener('click', ()=>{ resultModal.classList.remove('show'); });
+
+   
+    buildBullets(); render(); updateScorePreview();
+
+    const starfield = document.querySelector('.starfield');
+    for(let i=0;i<30;i++){
+      const s = document.createElement('div'); s.className='star';
+      s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%';
+      s.style.width = (2+Math.random()*4)+'px'; s.style.height = s.style.width;
+      s.style.animationDelay = (Math.random()*6)+'s'; starfield.appendChild(s);
+    }
+
+  </script>
+</body>
+</html>
